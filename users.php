@@ -9,7 +9,7 @@ if (!isset($_SESSION['userid']))
 // Connect to mysql and get users
 require_once('config/mysql.php');
 $db = connect_db();
-if (!$query = $db->query("SELECT id, name, username FROM users")) {
+if (!$query = $db->query("SELECT `id`, `name`, `username` FROM users")) {
     die("Query failed");
 }
 
@@ -22,9 +22,17 @@ while ($row = $query->fetch_object()) {
 // If POST -> create user
 if (isset($_POST['username']) and isset($_POST['password'])) {
 
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $name = addslashes($_POST['name']);
+    $username = addslashes($_POST['username']);
+    $password = addslashes($_POST['password']);
 
+    // Insert post into db
+    if (!$query = $db->query("INSERT INTO users (`name`, `username`, `password`) VALUES ('".$name."','".$username."','".$password."')")) {
+        die("Insert failed");
+    }
+
+    // Redirect to avoid refresh repost
+    header('location:users.php');
 }
 
 include_once('views/head_view.php');

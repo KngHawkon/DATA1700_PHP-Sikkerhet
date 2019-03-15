@@ -15,8 +15,13 @@ if (isset($_POST['username']) and isset($_POST['password'])) {
     require_once('config/mysql.php');
     $db = connect_db();
 
-    $username = addslashes($_POST['username']);
-    $password = addslashes($_POST['password']);
+    // Not so secure
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // More secure
+    // $username = addcslashes($_POST['username']);
+    // $password = addcslashes($_POST['password']);
 
     // Find user with matching username and password
     $sql = "SELECT * FROM users WHERE username='".$username."' AND password='".$password."'";

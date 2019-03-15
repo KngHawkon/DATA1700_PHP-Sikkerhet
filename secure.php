@@ -24,7 +24,11 @@ while ($row = $query->fetch_object()) {
 // If POST -> Save comment
 if (isset($_POST['body']) and isset($_SESSION['userid'])) {
 
-    $body = addslashes(htmlentities($_POST['body']));
+    // Very open for XSS
+    $body = addslashes($_POST['body']);
+
+    // More secure
+    // $body = addslashes(htmlentities($_POST['body']));
 
     // Insert post into db
     if (!$query = $db->query("INSERT INTO posts (userid, body) VALUES ('".$_SESSION['userid']."','".$body."')")) {
